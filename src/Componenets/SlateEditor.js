@@ -11,10 +11,13 @@ const SlateEditor = () => {
   const remote = useRef(false);
   const id = useRef(`${Date.now()}`); //create a new user id for each editor
   const [value, setValue] = useState(initialValue)
+  
+  const[edit,setEdit] =useState(true); //setting the edit into state and enabling it once all the users have joined the game
+  const[serverMessage,setServerMessage] =useState("Messages from the server"); //To Display messages from the server
 
   /**
    * on every event emeitted from server check if the Id coming from server matches the 
-   *  current id of the editor. if its coming from the other editor set the text into the current editor.
+   * current id of the editor. if its coming from the other editor set the text into the current editor.
    */
   useEffect(() => {
     socket.on(
@@ -31,8 +34,17 @@ const SlateEditor = () => {
       }
     );
 
+    socket.on("message", (msg) => {
+      setServerMessage(msg)
+  });
+  
+
+  socket.on("start", (msg) => {
+    setEdit(msg)
+});
+
     socket.on("error", (msg) => {
-      alert(msg);
+      setServerMessage(msg)
   }); 
 
   }, [editor]);
@@ -40,6 +52,7 @@ const SlateEditor = () => {
 
   return (
     <>
+    <h1>{serverMessage}</h1>
     <Slate
       editor={editor}
       value={value}
@@ -71,7 +84,7 @@ const SlateEditor = () => {
         }
       }}
     >
-      <Editable />
+      <Editable readOnly={edit}/>
     </Slate>
 
 
