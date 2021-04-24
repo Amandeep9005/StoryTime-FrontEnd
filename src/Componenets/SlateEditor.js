@@ -30,6 +30,11 @@ const SlateEditor = () => {
         }
       }
     );
+
+    socket.on("error", (msg) => {
+      alert(msg);
+  }); 
+
   }, [editor]);
 
 
