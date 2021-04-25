@@ -9,7 +9,7 @@ const socket = io("http://localhost:8080");
 const SlateEditor = () => {
   const editor = useMemo(() => withReact(createEditor()), [])
   const remote = useRef(false);
-  const id = useRef(`${Date.now()}`); //create a new user id for each editor
+  const id = useRef(); //create a new user id for each editor
   const [value, setValue] = useState(initialValue)
   
   const[edit,setEdit] =useState(true); //setting the edit into state and enabling it once all the users have joined the game
@@ -20,6 +20,27 @@ const SlateEditor = () => {
    * current id of the editor. if its coming from the other editor set the text into the current editor.
    */
   useEffect(() => {
+    //when connection is opened set the current id as the id provided from the socket/server so as to check if its your turn or not
+    socket.on("connect", () => {
+      id.current = socket.id;
+  });
+    
+  socket.on(
+    "user-turn",
+    ({socket,msg}) => {
+      if (id.current === socket) {
+        remote.current = true;
+        setEdit(false);
+        setServerMessage(msg);
+       remote.current = false;
+      }
+      else{
+        setServerMessage("Game in Progress");
+      }
+    }
+  );
+
+
     socket.on(
       "new-remote-operations",
       ({editorId, ops}) => {
