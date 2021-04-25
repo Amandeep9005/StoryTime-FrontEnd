@@ -68,6 +68,7 @@ const SlateEditor = () => {
 socket.on("game-over", () => {
   setEdit(true);
   setServerMessage("Game Over");
+  socket.emit("end")
 });
 
     socket.on("error", (msg) => {
