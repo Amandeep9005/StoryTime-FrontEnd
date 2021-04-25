@@ -24,7 +24,8 @@ const SlateEditor = () => {
     socket.on("connect", () => {
       id.current = socket.id;
   });
-    
+  
+  //if user turn event is received check if this is your turn if not set message as Game in progress
   socket.on(
     "user-turn",
     ({socket,msg}) => {
@@ -40,7 +41,7 @@ const SlateEditor = () => {
     }
   );
 
-
+    //if new remote operation event is received check if this is your event if not set content to the editor
     socket.on(
       "new-remote-operations",
       ({editorId, ops}) => {
