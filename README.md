@@ -16,5 +16,7 @@ npm install
 npm run start
 
 # Operation
+
 Run the Storytime Backend service first https://github.com/Amandeep9005/StoryTime-BackendService/blob/main/README.md
+
 open 5 tabs with http:\\localhost:3000 and enjoy the game.
